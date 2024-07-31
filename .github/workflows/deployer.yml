@@ -19,5 +19,6 @@ jobs:
           source_dir: src
           entry_point: hello_world
           runtime: python39
-          timeout: 60
+          timeout: 120 # Increased timeout to 120 seconds
           max_instances: 1
+

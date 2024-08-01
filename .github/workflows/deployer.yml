@@ -29,7 +29,7 @@ jobs:
 
             # Configure gcloud
             gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-            gcloud config set functions/region europe-west1
+            gcloud config set functions/region asia-south1
 
             # Deploy the Cloud Function
             gcloud functions deploy python-hello-world-cf \

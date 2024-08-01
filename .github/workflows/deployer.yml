@@ -34,14 +34,8 @@ jobs:
             gcloud config set functions/region asia-south1
 
             # Deploy the Cloud Function
-            gcloud functions deploy python-hello-world-cf \
-              --entry-point hello_world \
-              --runtime python39 \
-              --trigger-http \
-              --allow-unauthenticated \
-              --source src \ 
-              --timeout 300s \
-              --max-instances 1
+            gcloud functions deploy python-hello-world-cf --entry-point hello_world --runtime python39 --trigger-http --allow-unauthenticated --source src --timeout 300s --max-instances 1 
+            
 
             # Get the Cloud Function URL
             URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')

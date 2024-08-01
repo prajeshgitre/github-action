@@ -23,7 +23,7 @@ jobs:
 
       - name: Deploy Cloud Function
         run: |
-          echo ${{ secrets.GCP_SSH_PRIVATE_KEY }} > private.key
+          echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > private.key
           chmod 600 private.key
           ssh -i private.key prajesh@${{ secrets.VM_IP }} << 'EOF'
             # Authenticate with gcloud on the VM

@@ -23,7 +23,7 @@ jobs:
 
       - name: Deploy Cloud Function
         run: |
-          ssh -i ~/.ssh/id_rsa prajesh@${{ secrets.VM_IP }} << 'EOF'
+          ssh -i ${{ secrets.GCP_SSH_PRIVATE_KEY }} prajesh@${{ secrets.VM_IP }} << 'EOF'
             # Authenticate with gcloud on the VM
             gcloud auth activate-service-account --key-file=gcloud-service-key.json
 

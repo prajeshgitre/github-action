@@ -37,7 +37,7 @@ jobs:
               --runtime python39 \
               --trigger-http \
               --allow-unauthenticated \
-              --source /path/to/your/source \
+              --source src \ 
               --timeout 300s \
               --max-instances 1
 

@@ -3,11 +3,14 @@ name: Deploy Cloud Function
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the main branch
-
+      - main  # Trigger the workflow on push to the main branch 
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  
+      id-token: write
 
     steps:
       - name: Checkout code

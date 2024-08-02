@@ -3,25 +3,31 @@ name: Deploy Cloud Function
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the main branch 
-  
+      - main 
+
+permissions:
+  contents: read  
+  id-token: write 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read  
-      id-token: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Authenticate to Google Cloud
-        id: 'auth'
-        uses: 'google-github-actions/auth@v1'
+        uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/800832125481/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-          service_account: 'cloud-function-sa@prajesh.iam.gserviceaccount.com'
+          project_id: 'my-project'
+          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'cloud-function-sa@my-project.iam.gserviceaccount.com'
+          create_credentials_file: true
+          export_environment_variables: true
+          cleanup_credentials: true
+          access_token_lifetime: 3600s
+          access_token_scopes: https://www.googleapis.com/auth/cloud-platform
 
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
@@ -48,3 +54,4 @@ jobs:
         run: |
           URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')
           echo "Cloud Function deployed at: $URL"
+

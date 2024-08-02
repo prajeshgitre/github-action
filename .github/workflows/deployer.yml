@@ -30,7 +30,7 @@ jobs:
 
       - name: Configure gcloud
         run: |
-          gcloud config set project prajesh
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
           gcloud config set functions/region asia-south1
 
       - name: Deploy Cloud Function

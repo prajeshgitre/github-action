@@ -13,33 +13,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      - name: Authenticate to Google Cloud
+        id: 'auth'
+        uses: 'google-github-actions/auth@v1'
         with:
-          ssh-private-key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          workload_identity_provider: 'projects/800832125481/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'cloud-function-sa@prajesh.iam.gserviceaccount.com'
 
-      - name: Store GCP Service Account Key
-        run: echo "${{ secrets.GCP_SA_KEY }}" > ${{ github.workspace }}/gcloud-service-key.json
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure gcloud
+        run: |
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud config set functions/region asia-south1
 
       - name: Deploy Cloud Function
         run: |
-          echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > private.key
-          chmod 600 private.key
-          ssh -o StrictHostKeyChecking=no -i private.key prajesh@${{ secrets.VM_IP }} << 'EOF'
-            # Authenticate with gcloud on the VM
-            gcloud auth activate-service-account --key-file=gcloud-service-key.json
+          gcloud functions deploy python-hello-world-cf \
+            --entry-point hello_world \
+            --runtime python39 \
+            --trigger-http \
+            --allow-unauthenticated \
+            --source src \
+            --timeout 300s \
+            --max-instances 1
 
-            # Configure gcloud
-            gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-            gcloud config set functions/region asia-south1
+      - name: Get Cloud Function URL
+        run: |
+          URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')
+          echo "Cloud Function deployed at: $URL"
 
-            # Deploy the Cloud Function
-            gcloud functions deploy python-hello-world-cf --entry-point hello_world --runtime python39 --trigger-http --allow-unauthenticated --source src --timeout 300s --max-instances 1 
-            
-
-            # Get the Cloud Function URL
-            URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')
-            echo "Cloud Function deployed at: $URL"
-          EOF
 
 

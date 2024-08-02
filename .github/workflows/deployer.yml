@@ -3,7 +3,7 @@ name: Deploy Cloud Function
 on:
   push:
     branches:
-      - main 
+      - main  
 
 permissions:
   contents: read  
@@ -20,8 +20,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          project_id: 'my-project'
-          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          workload_identity_provider: 'projects/800832125481/locations/global/workloadIdentityPools/my-pool/providers/github'
           service_account: 'cloud-function-sa@my-project.iam.gserviceaccount.com'
           create_credentials_file: true
           export_environment_variables: true
@@ -54,4 +53,5 @@ jobs:
         run: |
           URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')
           echo "Cloud Function deployed at: $URL"
+
 

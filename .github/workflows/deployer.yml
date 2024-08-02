@@ -20,8 +20,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          workload_identity_provider: 'projects/800832125481/locations/global/workloadIdentityPools/my-github-pool/providers/github'
+          service_account: 'cloud-function-sa@prajesh.iam.gserviceaccount.com'
           create_credentials_file: true
           export_environment_variables: true
           cleanup_credentials: true
@@ -31,11 +31,11 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v1
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: prajesh
 
       - name: Configure gcloud
         run: |
-          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+          gcloud config set project prajesh
           gcloud config set functions/region asia-south1
 
       - name: Deploy Cloud Function

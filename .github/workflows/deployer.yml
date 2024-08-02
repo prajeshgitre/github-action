@@ -45,6 +45,3 @@ jobs:
         run: |
           URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')
           echo "Cloud Function deployed at: $URL"
-
-
-

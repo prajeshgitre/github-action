@@ -32,6 +32,7 @@ jobs:
         run: |
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
           gcloud config set functions/region asia-south1
+          gcloud auth configure-docker asia-south1-docker.pkg.dev
 
       - name: Build Docker Image
         run: |

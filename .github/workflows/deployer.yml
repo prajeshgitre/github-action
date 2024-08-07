@@ -20,7 +20,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_INDENTITY }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: Set up gcloud
@@ -36,11 +36,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
-
-      - name: Authenticate Docker to GCR
-        run: |
-          gcloud auth configure-docker gcr.io
-
+      
       - name: Push Docker Image to Artifact Registry
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
@@ -48,4 +44,14 @@ jobs:
       - name: Deploy Cloud Function from Image
         run: |
           gcloud functions deploy python-hello-world-cf \
-            --runtime 
+            --runtime python39 \
+            --trigger-http \
+            --allow-unauthenticated \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest \
+            --timeout 300s \
+            --max-instances 1
+
+      - name: Get Cloud Function URL
+        run: |
+          URL=$(gcloud functions describe python-hello-world-cf --format='value(httpsTrigger.url)')
+          echo "Cloud Function deployed at: $URL"

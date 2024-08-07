@@ -32,18 +32,18 @@ jobs:
         run: |
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
           gcloud config set functions/region asia-south1
-          gcloud auth configure-docker asia-south1-docker.pkg.dev
+          # gcloud auth configure-docker asia-south1-docker.pkg.dev
           
 
       - name: Build Docker Image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
+          docker build -t asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
           
 
       
       - name: Push Docker Image to Artifact Registry
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
+          docker push asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
 
       - name: Deploy Cloud Function from Image
         run: |

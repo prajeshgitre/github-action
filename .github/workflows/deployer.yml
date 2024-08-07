@@ -20,7 +20,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_INDENTITY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
       - name: Set up gcloud
@@ -36,6 +36,10 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
+
+      - name: Authenticate Docker to GCR
+        run: |
+          gcloud auth configure-docker
 
       - name: Push Docker Image to Artifact Registry
         run: |

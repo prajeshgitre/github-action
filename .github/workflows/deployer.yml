@@ -39,7 +39,6 @@ jobs:
 
       - name: Push Docker Image to Artifact Registry
         run: |
-          sudo usermod -aG docker $USER
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
 
       - name: Deploy Cloud Function from Image

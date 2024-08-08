@@ -58,7 +58,7 @@ jobs:
             --runtime python39 \
             --trigger-http \
             --allow-unauthenticated \
-            --source main.py\
+            --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function-ar-repo/my-fun:latest \
             --timeout 300s \
             --max-instances 1
 

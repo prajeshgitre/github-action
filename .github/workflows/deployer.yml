@@ -5,20 +5,18 @@ on:
     branches:
       - main  
 
-permissions:
-  contents: read  
-  id-token: write 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read  
+      id-token: write 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v4
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_INDENTITY }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
@@ -31,13 +29,13 @@ jobs:
       - name: Configure gcloud
         run: |
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-          gcloud config set functions/region asia-south1
+          # gcloud config set functions/region asia-south1
           # gcloud auth configure-docker asia-south1-docker.pkg.dev
           
 
       - name: Build Docker Image
         run: |
-          docker build -t asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
           
 
           
@@ -45,8 +43,6 @@ jobs:
       
       - name: Push Docker Image to Artifact Registry
         run: |
-          # gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-south1-docker.pkg.dev
-          cat /home/runner/.docker/config.json.
           # gcloud auth configure-docker asia-south1-docker.pkg.dev
            docker push asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
 

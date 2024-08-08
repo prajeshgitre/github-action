@@ -47,16 +47,12 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest .
-          
-
-          
-
-      
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function-ar-repo/my-fun:latest ./
+        
       - name: Push Docker Image to Artifact Registry
         run: |
           # gcloud auth configure-docker asia-south1-docker.pkg.dev
-           docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
+           docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function-ar-repo/my-fun:latest
 
       - name: Deploy Cloud Function from Image
         run: |

@@ -44,7 +44,7 @@ jobs:
       - name: Push Docker Image to Artifact Registry
         run: |
           # gcloud auth configure-docker asia-south1-docker.pkg.dev
-           docker push asia.gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
+           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-cloud-function:latest
 
       - name: Deploy Cloud Function from Image
         run: |

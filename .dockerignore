@@ -1,7 +1,0 @@
-# Ignore everything
-*
-
-# Except the following files
-!requirements.txt
-!Dockerfile
-!**/*.py
